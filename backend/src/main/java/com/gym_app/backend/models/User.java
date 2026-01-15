@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.UUID;
 
@@ -48,6 +49,7 @@ public class User {
     private OffsetDateTime updatedAt = OffsetDateTime.now();
 
     @Column(name = "role", length = 50)
+    @Pattern(regexp = "^(ADMIN|USER)$")
     private String role = "USER"; // Default role: USER or ADMIN
 
     // --- Constructors ---
