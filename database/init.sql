@@ -22,7 +22,8 @@ CREATE table if not EXISTS users (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL, -- store the hash, NEVER THE PLAIN PASSWORD !!!
-    icon_path VARCHAR(255), -- path to user icon/image
+    icon_path VARCHAR(255), -- path to user icon/image,
+    role VARCHAR(50) DEFAULT 'USER', -- 'USER' or 'ADMIN'
     created_by VARCHAR(50),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_by VARCHAR(50),
