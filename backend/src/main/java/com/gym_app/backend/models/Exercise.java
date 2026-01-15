@@ -3,6 +3,7 @@ package com.gym_app.backend.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,9 +18,11 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @NotBlank
     @Column(name = "name", unique = true, nullable = false, length = 100)
     private String name;
 
+    @NotBlank
     @Column(name = "muscle_group", nullable = false, length = 50)
     private String muscleGroup;
 

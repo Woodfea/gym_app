@@ -9,6 +9,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.util.UUID;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -23,18 +26,25 @@ public class Set {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_exercise_id", nullable = false)
+    @NotNull
     private WorkoutExercise workoutExercise;
 
     @Column(name="reps", nullable = false)
+    @PositiveOrZero
+    @NotNull
     private Integer reps;
 
     @Column(name="weight", nullable = false, precision = 5, scale = 2)
+    @PositiveOrZero
+    @NotNull
     private BigDecimal weight;
 
     @Column(name="rpe", precision = 2, scale = 1)
+    @PositiveOrZero
     private BigDecimal rpe;
 
     @Column(name = "set_order")
+    @PositiveOrZero
     private Integer setOrder = 0;
 
     @Column(name = "created_by", length = 50)
