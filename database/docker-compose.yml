@@ -1,0 +1,16 @@
+services:
+  # La base de données PostgreSQL
+  db:
+    image: postgres:16-alpine # Version légère et stable
+    container_name: gym_db
+    restart: always
+    environment:
+      POSTGRES_USER: myuser        # Change-les pour la prod
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: gym_db
+    ports:
+      - "5432:5432" # On expose le port pour pouvoir se connecter avec DBeaver
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Pour ne pas perdre tes données au redémarrage
+volumes:
+  postgres_data:
