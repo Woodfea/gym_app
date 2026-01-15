@@ -6,7 +6,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.UUID;
+
 import java.time.OffsetDateTime;
 
 @Entity
@@ -17,12 +20,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO) // Hibernate manage the UUID
     private UUID id;
 
+    @NotBlank
     @Column(name = "username", unique = true, nullable = false, length = 50)
     private String username;
 
+    @NotBlank
     @Column(name = "email", unique = true, nullable = false, length = 255)
     private String email;
 
+    @NotBlank
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
@@ -40,6 +46,9 @@ public class User {
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt = OffsetDateTime.now();
+
+    @Column(name = "role", length = 50)
+    private String role = "USER"; // Default role: USER or ADMIN
 
     // --- Constructors ---
     public User() {
@@ -113,5 +122,13 @@ public class User {
 
     public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
