@@ -30,13 +30,13 @@ public class Workout {
     @Column(name = "workout_date")
     private OffsetDateTime workoutDate = OffsetDateTime.now();
 
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 50)
     private String created_by;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt = OffsetDateTime.now();
 
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 50)
     private String updated_by;
 
     @Column(name = "updated_at")
@@ -79,7 +79,7 @@ public class Workout {
         this.workoutDate = workoutDate;
     }
 
-        public String getCreated_by() {
+    public String getCreated_by() {
         return created_by;
     }
     public void setCreated_by(String created_by) {

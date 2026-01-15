@@ -10,8 +10,8 @@ import java.util.UUID;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "exercices")
-public class Exercice {
+@Table(name = "exercises")
+public class Exercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,20 +23,20 @@ public class Exercice {
     @Column(name = "muscle_group", nullable = false, length = 50)
     private String muscleGroup;
 
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 50)
     private String created_by;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt = OffsetDateTime.now();
 
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 50)
     private String updated_by;
 
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt = OffsetDateTime.now();
 
       // --- Constructors ---
-    public Exercice() {
+    public Exercise() {
     }
 
     // --- GETTERS AND SETTERS ---

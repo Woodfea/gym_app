@@ -23,19 +23,19 @@ public class User {
     @Column(name = "email", unique = true, nullable = false, length = 255)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
     @Column(name = "icon_path", length = 255)
     private String iconPath;
 
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 50)
     private String created_by;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt = OffsetDateTime.now();
 
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 50)
     private String updated_by;
 
     @Column(name = "updated_at")
