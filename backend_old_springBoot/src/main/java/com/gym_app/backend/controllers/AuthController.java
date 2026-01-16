@@ -1,17 +1,27 @@
 package com.gym_app.backend.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.validation.Valid;
 
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.gym_app.backend.models.User;
+import com.gym_app.backend.repositories.JwtResponseRepository;
 import com.gym_app.backend.repositories.UserRepository;
-import com.gym_app.backend.services.JwtService;
+import com.gym_app.backend.utils.JwtUtils;
+import com.gym_app.backend.repositories.LoginRequestRepository;
+
 import java.time.OffsetDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -20,12 +30,12 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtUtils JwtUtils;
     
-    public AuthController(UserRepository userRepository, JwtService jwtService) {
+    public AuthController(UserRepository userRepository, JwtUtils JwtUtils) {
         this.userRepository = userRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
-        this.jwtService = jwtService;
+        this.JwtUtils = JwtUtils;
     }
 
     // --- REGISTER ---
@@ -67,29 +77,23 @@ public class AuthController {
 
     // --- LOGIN ---
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(
+            @RequestBody LoginRequestRepository loginRequestRepository,
+            @RequestHeader("Origin") String origin) {
         
-        Optional<User> userOpt = userRepository.findByUsername(loginRequest.username());
+        Optional<User> userOpt = userRepository.findByUsername(loginRequestRepository.getLogin());
 
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            
-            // Verify password matches the hash in database
-            if (passwordEncoder.matches(loginRequest.password(), user.getPasswordHash())) {
-                
-                // Generate real JWT token
-                String token = jwtService.generateToken(user.getUsername(), user.getId(), user.getEmail());
-                
-                return ResponseEntity.ok(new JwtResponse(
-                        token, 
-                        user.getId(), 
-                        user.getUsername(), 
-                        user.getEmail()
-                ));
-            }
+        if (userOpt.isEmpty() || !passwordEncoder.matches(loginRequestRepository.getPassword(), userOpt.get().getPasswordHash())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Invalid login or password");
         }
 
-        // Authentication failed
-        return ResponseEntity.status(401).body("Error: Invalid credentials");
+        User user = userOpt.get();
+        String token = JwtUtils.generateToken(user.getUsername(), true, origin);
+        return ResponseEntity.ok(new JwtResponseRepository(
+            token,
+            user.getId(),
+            origin,
+            user.getEmail()
+        ));
     }
 }
