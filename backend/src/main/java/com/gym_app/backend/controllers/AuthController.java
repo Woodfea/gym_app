@@ -47,11 +47,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-        try {
-            userService.register(request.getUsername(), request.getPassword(), request.getEmail(), request.getIcon_path());
-            return ResponseEntity.ok("Utilisateur créé avec succès !");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error during the subcription");
-        }
+        userService.register(request.getUsername(), request.getPassword(), request.getEmail(), request.getIcon_path());
+        return ResponseEntity.ok("User created with success !");
     }
 }

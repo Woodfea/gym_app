@@ -30,7 +30,6 @@ public class SecurityConfig {
             )
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((request, response, authException) -> {
-                    // Au lieu d'ouvrir une fenêtre, on renvoie juste "401 Unauthorized"
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not authorized");
                 })
             )
