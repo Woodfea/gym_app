@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.gym_app.backend.exceptions.EmailAlreadyExistsException;
-import com.gym_app.backend.exceptions.UserAlreadyExistsException;
+import com.gym_app.backend.exceptions.UsernameAlreadyExistsException;
+import com.gym_app.backend.exceptions.UsernameNotExistException;
+import com.gym_app.backend.exceptions.WrongPasswordException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,8 +28,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleUserExists(UserAlreadyExistsException e) {
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleUserExists(UsernameAlreadyExistsException e) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("message", e.getMessage());
         errorResponse.put("error_code", "USER_EXISTS");
@@ -42,6 +44,24 @@ public class GlobalExceptionHandler {
         errorResponse.put("error_code", "EMAIL_EXISTS");
         
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(UsernameNotExistException.class)
+    public ResponseEntity<Map<String, String>> handleUsernameNotExist(UsernameNotExistException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("message", e.getMessage());
+        errorResponse.put("error_code", "USERNAME_NOT_EXIST");
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(WrongPasswordException.class)
+    public ResponseEntity<Map<String, String>> handleWrongPassword(WrongPasswordException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("message", e.getMessage());
+        errorResponse.put("error_code", "WRONG_PASSWORD");
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
     
     @ExceptionHandler(Exception.class)
